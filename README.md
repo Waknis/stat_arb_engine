@@ -14,7 +14,7 @@ A sophisticated, end‑to‑end quantitative trading system that demonstrates **
 * Provides interactive Streamlit dashboard with real-time data visualization powered by Plotly
 
 ## Technical Implementation
-* **Data Pipeline**: Efficient data retrieval with built-in rate limiting and exponential backoff
+* **Data Pipeline**: Clean and efficient market data retrieval from Polygon.io
 * **Alpha Model**: Statistical mean-reversion strategy based on volume-weighted price deviations
 * **Execution**: Event-driven backtesting framework with simulation of market orders
 * **Risk Management**: Real-time performance analytics with standard financial metrics
@@ -40,16 +40,105 @@ Based on recent backtests across major tech stocks:
 *Note: Results vary based on market conditions and timeframe selected*
 
 ## Technical Architecture
+
+### System Design
+
+The application follows a modular design with clear separation of concerns:
+
 ```
-┌─────────────┐     ┌─────────────┐     ┌────────────────┐     ┌────────────────┐
-│  Polygon.io │────▶│ Data Parser │────▶│ Alpha Strategy │────▶│ Risk Analytics │
-└─────────────┘     └─────────────┘     └────────────────┘     └────────────────┘
-                                                │                      │
-                                                ▼                      ▼
-                                          ┌──────────────────────────────┐
-                                          │      Streamlit Dashboard     │
-                                          └──────────────────────────────┘
+┌─────────────────────────────┐
+│  Market Data Provider Layer │
+├─────────────────────────────┤
+│ • Polygon.io REST API       │◄────┐
+│ • API key authentication    │     │
+│ • Parameter validation      │     │ HTTP/REST
+└──────────────┬──────────────┘     │
+               │                     │
+               ▼                     │
+┌─────────────────────────────┐     │
+│  Data Processing Layer      │     │
+├─────────────────────────────┤     │
+│ • DataFrame transformations │     │
+│ • OHLCV normalization       │     │
+│ • Timestamp handling        │     │
+└──────────────┬──────────────┘     │
+               │                     │
+               ▼                     │
+┌─────────────────────────────┐     │
+│  Alpha Generation Layer     │     │
+├─────────────────────────────┤     │
+│ • VWAP calculation          │     │
+│ • Z-score computation       │     │
+│ • Mean-reversion signals    │     │
+└──────────────┬──────────────┘     │
+               │                     │
+               ▼                     │
+┌─────────────────────────────┐     │
+│  Execution Simulation Layer │     │
+├─────────────────────────────┤     │
+│ • Position management       │     │
+│ • Transaction cost model    │     │
+│ • P&L calculation           │     │
+└──────────────┬──────────────┘     │
+               │                     │
+               ▼                     │
+┌─────────────────────────────┐     │
+│  Risk Analytics Layer       │     │
+├─────────────────────────────┤     │
+│ • Sharpe ratio calculation  │     │
+│ • Drawdown analysis         │     │
+│ • Return metrics            │     │
+└──────────────┬──────────────┘     │
+               │                     │
+               ▼                     │
+┌─────────────────────────────┐     │
+│  Visualization Layer        │     │
+├─────────────────────────────┤     │
+│ • Streamlit web application │     │
+│ • Interactive Plotly charts │     │
+│ • Session state management  ├─────┘
+│ • User parameter control    │
+└─────────────────────────────┘
 ```
+
+### Data Flow Architecture
+
+1. **Data Acquisition**
+   - Direct REST API requests to Polygon.io with API key authentication
+   - Parameter handling for ticker symbols, date ranges, and interval specifications
+   - JSON response parsing and error handling
+
+2. **Data Processing**
+   - Pandas DataFrame operations for data manipulation
+   - Time-series index creation and timezone normalization
+   - Column renaming and standardization
+   - Data filtering and cleaning
+
+3. **Alpha Model**
+   - Mean-reversion strategy implementation using VWAP
+   - Z-score calculation to measure deviation from average
+   - Signal generation based on threshold crossings
+   - Vectorized calculations for performance
+
+4. **Backtesting Engine**
+   - Event-driven simulation framework
+   - Position tracking logic
+   - Transaction cost modeling
+   - Vectorized return calculations
+
+5. **Risk Analysis**
+   - Standard financial metrics calculation
+   - Sharpe ratio computation with appropriate scaling
+   - Maximum drawdown detection
+   - Performance evaluation logic
+
+6. **Visualization**
+   - Interactive Streamlit dashboard
+   - Plotly chart generation for performance visualization
+   - User interface for parameter selection
+   - Dynamic updates based on user input
+
+This architecture provides a clean separation of concerns while maintaining simplicity and readability.
 
 ## Quick Start
 ```bash
