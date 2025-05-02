@@ -4,7 +4,7 @@ A sophisticated, end‑to‑end quantitative trading system that demonstrates **
 
 **Live Demo:** <https://statarb.streamlit.app>
 
-![Dashboard Preview](https://user-images.githubusercontent.com/your_user_id/stat_arb_engine/dashboard_preview.png)
+![Dashboard Preview](https://github.com/Waknis/stat_arb_engine/blob/main/Screenshot%202025-05-02%20at%2015.20.01.png?raw=true)
 
 ## Features
 * Fetches high-precision 1‑minute intraday market data for U.S. equities via Polygon.io API
