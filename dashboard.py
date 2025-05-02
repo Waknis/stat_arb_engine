@@ -3,7 +3,15 @@ import streamlit as st
 import pandas as pd
 import datetime as dt
 import plotly.express as px
+import os
 from main import run
+
+# Set the Polygon API key from Streamlit secrets if available
+if 'POLYGON_API_KEY' in st.secrets:
+    os.environ['POLYGON_API_KEY'] = st.secrets['POLYGON_API_KEY']
+    has_api_key = True
+else:
+    has_api_key = 'POLYGON_API_KEY' in os.environ
 
 st.set_page_config(page_title='Stat‑Arb Engine', layout='wide')
 st.title('Intraday Statistical Arbitrage Engine')
@@ -27,19 +35,24 @@ with st.sidebar:
 
 # Check if API key is present
 api_key_info = st.empty()
-if not run_button and "summary" not in st.session_state:
-    api_key_info.info("Make sure your Polygon API key is set as an environment variable.")
+if not has_api_key:
+    api_key_info.error("❌ Polygon API key not found. Please set it in .streamlit/secrets.toml or as an environment variable.")
+elif not run_button and "summary" not in st.session_state:
+    api_key_info.success("✅ Polygon API key detected")
 
 if run_button:
-    with st.spinner('Running back-test...'):
-        try:
-            tickers = tickers_input.strip().upper().split()
-            summary = run(tickers, start_date.isoformat(), end_date.isoformat())
-            st.session_state["summary"] = summary
-            st.session_state["tickers"] = tickers
-            api_key_info.empty()
-        except Exception as e:
-            st.error(f"Error: {str(e)}")
+    if not has_api_key:
+        st.error("Cannot run without Polygon API key")
+    else:
+        with st.spinner('Running back-test...'):
+            try:
+                tickers = tickers_input.strip().upper().split()
+                summary = run(tickers, start_date.isoformat(), end_date.isoformat())
+                st.session_state["summary"] = summary
+                st.session_state["tickers"] = tickers
+                api_key_info.empty()
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
 
 if "summary" in st.session_state:
     summary = st.session_state["summary"]

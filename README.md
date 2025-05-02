@@ -26,6 +26,20 @@ streamlit run dashboard.py
 
 > **Note:** Polygon.io offers free tier access with some limitations. Check https://polygon.io/pricing for details.
 
+## Deploying to Streamlit Cloud
+
+This app supports deployment to Streamlit Cloud with secure handling of API keys:
+
+1. Fork this repository to your GitHub account
+2. Go to [share.streamlit.io](https://share.streamlit.io/) and log in
+3. Create a new app and select your forked repository
+4. Set the main file path to `dashboard.py`
+5. In the app settings, add your Polygon API key to secrets using the following format:
+   ```toml
+   POLYGON_API_KEY = "your_polygon_api_key_here"
+   ```
+6. Deploy the app!
+
 ## Folder Structure
 ```
 stat_arb_engine/
@@ -36,6 +50,8 @@ stat_arb_engine/
 ├── main.py             # CLI entrypoint
 ├── risk.py             # Risk metrics
 ├── requirements.txt    # Dependencies
+├── .streamlit/         # Streamlit configuration
+│   └── secrets.toml    # Local secrets (not committed to Git)
 └── README.md           # Documentation
 ```
 
