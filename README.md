@@ -2,7 +2,7 @@
 
 A lightweight, end‑to‑end project that demonstrates **alpha discovery, risk management, and back‑testing** for a quant‑trading résumé.
 
-**Live Demo:** <https://statarb.streamlit.app/>
+**Live Demo:** <https://statarb.streamlit.app>
 
 ## Features
 * Pulls 1‑minute intraday data for U.S. equities via Polygon.io API
