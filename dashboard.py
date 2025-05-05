@@ -78,7 +78,8 @@ if "summary" in st.session_state:
             y='sharpe',
             title="Sharpe Ratio by Ticker",
             color='sharpe',
-            color_continuous_scale=px.colors.sequential.Blues
+            color_continuous_scale=px.colors.sequential.Blues,
+            range_color=[-5, 5]
         )
         st.plotly_chart(fig, use_container_width=True)
     
@@ -93,7 +94,7 @@ if "summary" in st.session_state:
             size=summary['cumulative_return'].abs() * 100,
             color='sharpe',
             color_continuous_scale=px.colors.diverging.RdBu,
-            range_color=[-50, 50]
+            range_color=[-5, 5]
         )
         fig.update_traces(textposition='top center')
         st.plotly_chart(fig, use_container_width=True)
